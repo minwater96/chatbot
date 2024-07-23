@@ -1,0 +1,25 @@
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+
+URL = f'https://api.telegram.org/bot{TOKEN}'
+
+method = 'getUpdates'
+
+res = requests.get(f'{URL}/{method}')
+
+res_dict = res.json()
+
+user_input = res_dict['result'][-1]['message']['text']
+user_id = res_dict['result'][-1]['message']['from']['id']
+
+print(user_id, user_input)
+
+# ? = 뒤에 들어오는 건 파라미터라는 표시
+SEND_MSG_URL = f'{URL}/sendMessage?chat_id={user_id}&text={user_input}'
+
+requests.get(SEND_MSG_URL)
